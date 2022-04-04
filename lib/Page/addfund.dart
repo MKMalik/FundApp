@@ -172,70 +172,80 @@ class _AddFundState extends State<AddFund> {
                           height: 20.0,
                         ),
                         Center(
-                          child: ElevatedButton(
-                            child:Container(
-                              width: size.width * 0.17,
-                              height: size.height * 0.06,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.account_balance_wallet),
-                                  SizedBox(
-                                    width: 10.0,
-                                  ),
-                                  Text(
-                                    'Add',
-                                    style: cardItemTextStyle.copyWith(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
+                            child: ElevatedButton(
+                          child: Container(
+                            width: size.width * 0.17,
+                            height: size.height * 0.06,
+                            child: Row(
+                              children: [
+                                Icon(Icons.account_balance_wallet),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Text(
+                                  'Add',
+                                  style: cardItemTextStyle.copyWith(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.white, // background
-                              onPrimary: Colors.black, // foreground
-                            ),
-                            onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          'Payment processing. Please wait')));
-                              
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white, // background
+                            onPrimary: Colors.black, // foreground
+                          ),
+                          onPressed: () async {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('Payment processing. Please wait'),
+                              duration: Duration(minutes: 5),
+                            ));
 
-                              showDialog(context: context, builder: (BuildContext dialogcontext) {
-                                return AlertDialog(
-                                  title: Text('Do you want to add amount ?'),
-                                  actions: [
-                                    TextButton(onPressed: (){
-                                      _dbRepository
-                                      .addFund(
-                                      amount: amount,
-                                      userId: currentUserId,
-                                      userName: widget.currentUser.name,
-                                      paymentMethod: selectedPaymentMethod,
-                                    ) .then((value) {
-                                      ScaffoldMessenger.of(context)
-                                          .hideCurrentSnackBar();
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                          content: Text(
-                                              'Fund added in pending section. Contact Admin')));
-                                      Future.delayed(Duration(milliseconds: 200))
-                                          .then((value) {
-                                        Navigator.of(dialogcontext).pop();
-                                        Navigator.of(context).pop();
-                                      });
-                                    },);
+                            await showDialog(
+                                context: context,
+                                builder: (BuildContext dialogcontext) {
+                                  return AlertDialog(
+                                    title: Text('Do you want to add amount ?'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () async {
+                                            await _dbRepository
+                                                .addFund(
+                                              amount: amount,
+                                              userId: currentUserId,
+                                              userName: widget.currentUser.name,
+                                              paymentMethod:
+                                                  selectedPaymentMethod,
+                                            )
+                                                .then(
+                                              (value) {
+                                                ScaffoldMessenger.of(context)
+                                                    .hideCurrentSnackBar();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                            'Fund added in pending section. Contact Admin')));
+                                                Future.delayed(Duration(
+                                                        milliseconds: 200))
+                                                    .then((value) {
+                                                  Navigator.of(dialogcontext)
+                                                      .pop();
+                                                  Navigator.of(context).pop();
+                                                });
+                                              },
+                                            );
+                                          },
+                                          child: Text('Yes')),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(dialogcontext).pop();
+                                          },
+                                          child: Text('No')),
+                                    ],
+                                  );
+                                });
 
-                                    }, child: Text('Yes')),
-                                    TextButton(onPressed:(){
-                                      Navigator.of(dialogcontext).pop();
-                                    } , child: Text('No')),
-                                    
-                                  ],
-                                );
-                              });
-                              
-                              // add amount by user
+                            // add amount by user
 
                             //   _dbRepository
                             //       .addFund(
@@ -256,9 +266,8 @@ class _AddFundState extends State<AddFund> {
                             //     });
                             //   });
                             // },
-                            
-                             }, )
-                        )
+                          },
+                        ))
                       ],
                     ),
                   ),

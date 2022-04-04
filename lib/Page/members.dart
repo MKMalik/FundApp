@@ -52,22 +52,24 @@ class _MembersState extends State<Members> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: Container(     // floating disable while loading data 
-          child: isDataLoaded ? FloatingActionButton.extended(
-            backgroundColor: Colors.black87,
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AddFund(
-                        currentUser: currentUser,
-                      )));
-            },
-            label:Row(
-              children: [
-                Icon(Icons.add),
-                Text('Add Fund'),
-              ],
-            )
-          ):SizedBox(),
+        floatingActionButton: Container(
+          // floating disable while loading data
+          child: isDataLoaded
+              ? FloatingActionButton.extended(
+                  backgroundColor: Colors.black87,
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AddFund(
+                              currentUser: currentUser,
+                            ),),);
+                  },
+                  label: Row(
+                    children: [
+                      Icon(Icons.add),
+                      Text('Add Fund'),
+                    ],
+                  ))
+              : SizedBox(),
         ),
         appBar: AppBar(
           elevation: 0,
@@ -83,53 +85,54 @@ class _MembersState extends State<Members> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: isDataLoaded
-              ? Container(
-                  width: size.width,
-                  height: size.height,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFFF12711),
-                        Color(0xFFF5AF19),
-                      ],
-                    ),
+        body: isDataLoaded
+            ? Container(
+                width: size.width,
+                height: size.height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xFFF12711),
+                      Color(0xFFF5AF19),
+                    ],
                   ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(size.width * 0.05),
-                        child: Column(
-                          children: [
-                            Container(
-                              child: Text(
-                                'Members',
-                                style: cardItemTextStyle.copyWith(
-                                  fontSize: size.width * 0.07,
-                                  color: Color(0xffFFFFFF),
-                                ),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(size.width * 0.05),
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Text(
+                              'Members',
+                              style: cardItemTextStyle.copyWith(
+                                fontSize: size.width * 0.07,
+                                color: Color(0xffFFFFFF),
                               ),
                             ),
-                            // Container(
-                            //   child: Text('Rs.$balance',
-                            //       style: cardItemTextStyle.copyWith(
-                            //         fontSize: size.width * 0.1,
-                            //         color: Color(0xffFFFFFF),
-                            //       )),
-                            // ),
-                            Divider(
-                              color: Colors.white,
-                              thickness: 1,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 50),
-                              child: Column(
+                          ),
+                          // Container(
+                          //   child: Text('Rs.$balance',
+                          //       style: cardItemTextStyle.copyWith(
+                          //         fontSize: size.width * 0.1,
+                          //         color: Color(0xffFFFFFF),
+                          //       )),
+                          // ),
+                          Divider(
+                            color: Colors.white,
+                            thickness: 1,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: SingleChildScrollView(
+                              child: SizedBox(
+                                height: size.height * 0.7,
+                                child: Column(
                                 children: [
                                   for (int i = 0; i < members.length; i++)
-                                    // MemberCard()
                                     Reusablecard(
                                       item: members[i].name,
                                       size: size,
@@ -140,15 +143,16 @@ class _MembersState extends State<Members> {
                                     ),
                                 ],
                               ),
+                              ),
                             ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              : Center(child: CircularProgressIndicator()),
-        ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            : Center(child: CircularProgressIndicator()),
       ),
     );
   }

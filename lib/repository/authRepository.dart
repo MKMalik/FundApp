@@ -40,7 +40,7 @@ class AuthRepository with ChangeNotifier {
         _user = firebaseUser;
 
         // check if authorized or unauthorized
-        _firestore
+        await _firestore
             .collection("users")
             .doc(_auth.currentUser!.uid)
             .get()
